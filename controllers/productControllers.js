@@ -17,7 +17,14 @@ const allProducts = async (req, res) =>{
     // } catch (error) {
     //     return res.status(500).json({msg: "Something wrong"});
     // }
-    const products = await Product.find().select('-_id');
+
+
+    let filter = {};
+    if(req.query.categories){
+        filter = {category: req.query.categories.split(',')}
+    }
+
+    const products = await Product.find(filter).populate('category');
 
     if(!products){
         return res.status(500).json({success: false});
